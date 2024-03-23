@@ -1,11 +1,15 @@
-#ifndef LOG_INCLUDED
-#define LOG_INCLUDED
+#ifndef LOGD_INCLUDED
+#define LOGD_INCLUDED
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 
 #define UNUSED(x) (void)(x)
+#define NOW     time(NULL)
+#define SEED_PRNG() srand(time(NULL) ^ getpid())
+#define BAD_PRNG() srand(1)
 
 // ANSI color escape codes
 #define CRESET   "\x1b[0m"
