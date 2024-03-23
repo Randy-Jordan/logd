@@ -1,5 +1,5 @@
-#ifndef LOGD_INCLUDED
-#define LOGD_INCLUDED
+#ifndef LOG_INCLUDED
+#define LOG_INCLUDED
 
 
 #include <stdio.h>
@@ -25,20 +25,17 @@
 
 enum{LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL,LOG_LEVEL_COUNT};
 
-#define LOGD_TRACE(stream, ...) logd(stream,LOG_TRACE, __FILE__, __LINE__, __VA_ARGS__)
-#define LOGD_DEBUG(stream, ...) logd(stream,LOG_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
-#define LOGD_INFO(stream, ...)  logd(stream,LOG_INFO,  __FILE__, __LINE__, __VA_ARGS__)
-#define LOGD_WARN(stream, ...)  logd(stream,LOG_WARN,  __FILE__, __LINE__, __VA_ARGS__)
-#define LOGD_ERROR(stream, ...) logd(stream,LOG_ERROR, __FILE__, __LINE__, __VA_ARGS__)
-#define LOGD_FATAL(stream, ...) logd(stream,LOG_FATAL, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_TRACE(stream, ...) logd(stream,LOG_TRACE, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_DEBUG(stream, ...) logd(stream,LOG_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_INFO(stream, ...)  logd(stream,LOG_INFO,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_WARN(stream, ...)  logd(stream,LOG_WARN,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_ERROR(stream, ...) logd(stream,LOG_ERROR, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_FATAL(stream, ...) logd(stream,LOG_FATAL, __FILE__, __LINE__, __VA_ARGS__)
 void logd(FILE *stream, int level, const char *file, int line, const char *fmt, ...);
 
 #ifdef DEBUG
 #define TEST_FAILED(expr) printf(__DATE__" " __TIME__ " [%s@%d] " ANSI_COLOR_RED "FAILED %s \n"CRESET, __FILE__, __LINE__, #expr)
-    
 #define TEST_PASSED(expr) printf(__DATE__" " __TIME__ " [%s@%d] " ANSI_COLOR_GREEN "PASSED %s\n"CRESET, __FILE__, __LINE__, #expr)
-    
-
 #define TEST(expr) ((expr) ? TEST_PASSED(expr) : TEST_FAILED(expr))
 #else
 #define TEST_FAILED(expr)
