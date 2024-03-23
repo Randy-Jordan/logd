@@ -8,7 +8,7 @@
 #define UNUSED(x) (void)(x)
 
 // ANSI color escape codes
-#define ANSI_COLOR_RESET   "\x1b[0m"
+#define CRESET   "\x1b[0m"
 #define ANSI_COLOR_BLACK "\e[0;30m"
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define BOLD_RED "\x1b[1;91m"
@@ -32,4 +32,18 @@ enum{LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL,LOG_LEVEL_CO
 #define LOGD_ERROR(stream, ...) logd(stream,LOG_ERROR, __FILE__, __LINE__, __VA_ARGS__)
 #define LOGD_FATAL(stream, ...) logd(stream,LOG_FATAL, __FILE__, __LINE__, __VA_ARGS__)
 void logd(FILE *stream, int level, const char *file, int line, const char *fmt, ...);
+
+#ifdef DEBUG
+#define TEST_FAILED(expr) printf(__DATE__" " __TIME__ " [%s@%d] " ANSI_COLOR_RED "FAILED %s \n"CRESET, __FILE__, __LINE__, #expr)
+    
+#define TEST_PASSED(expr) printf(__DATE__" " __TIME__ " [%s@%d] " ANSI_COLOR_GREEN "PASSED %s\n"CRESET, __FILE__, __LINE__, #expr)
+    
+
+#define TEST(expr) ((expr) ? TEST_PASSED(expr) : TEST_FAILED(expr))
+#else
+#define TEST_FAILED(expr)
+#define TEST_PASSED(expr)
+#define TEST(expr)
+#endif
+
 #endif

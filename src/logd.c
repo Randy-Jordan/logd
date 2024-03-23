@@ -12,7 +12,7 @@ void logd( FILE *stream, int level, const char *file, int line, const char *form
         fprintf(stream,"%s %s ",__DATE__,__TIME__);
         
         fprintf(stream,"[%s@%d] ",__FILE__,__LINE__);  
-        fprintf(stream,"%s[%s] "ANSI_COLOR_RESET,level_colors[level], level_strings[level]);
+        fprintf(stream,"%s[%s] ",level_colors[level], level_strings[level]);
         va_list args;
         va_start(args, format);
         vfprintf(stream,format,args);
