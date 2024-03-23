@@ -27,14 +27,14 @@
 #define ANSI_STYLE_BOLD      "\x1b[1m"
 #define ANSI_STYLE_UNDERLINE "\x1b[4m"
 
-enum{LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL,LOG_LEVEL_COUNT};
+enum {LEVEL_TRACE=0,LEVEL_DEBUG,LEVEL_INFO,LEVEL_WARN,LEVEL_ERROR,LEVEL_FATAL,LEVEL_COUNT};
 
-#define LOG_TRACE(stream, ...) logd(stream,LOG_TRACE, __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_DEBUG(stream, ...) logd(stream,LOG_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_INFO(stream, ...)  logd(stream,LOG_INFO,  __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_WARN(stream, ...)  logd(stream,LOG_WARN,  __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_ERROR(stream, ...) logd(stream,LOG_ERROR, __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_FATAL(stream, ...) logd(stream,LOG_FATAL, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_TRACE(stream, ...) logd(stream,LEVEL_TRACE, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_DEBUG(stream, ...) logd(stream,LEVEL_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_INFO(stream, ...)  logd(stream,LEVEL_INFO,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_WARN(stream, ...)  logd(stream,LEVEL_WARN,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_ERROR(stream, ...) logd(stream,LEVEL_ERROR, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_FATAL(stream, ...) logd(stream,LEVEL_FATAL, __FILE__, __LINE__, __VA_ARGS__)
 void logd(FILE *stream, int level, const char *file, int line, const char *fmt, ...);
 
 #ifdef DEBUG

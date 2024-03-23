@@ -8,7 +8,7 @@ void logd( FILE *stream, int level, const char *file, int line, const char *form
     UNUSED(file);
     UNUSED(line);
     // Ensure the level is within the valid range
-    if (level >= LOG_TRACE && level <= LOG_FATAL) {
+    if (level >= LEVEL_TRACE && level <= LEVEL_FATAL) {
         fprintf(stream,"%s %s ",__DATE__,__TIME__);
         
         fprintf(stream,"[%s@%d] ",__FILE__,__LINE__);  
