@@ -1,7 +1,7 @@
 #include "../include/logd.h"
 
 static const char *level_colors[] = {
-  ANSI_COLOR_BLUE, ANSI_COLOR_MAGENTA, ANSI_COLOR_GREEN, ANSI_COLOR_YELLOW, ANSI_COLOR_RED, BOLD_RED
+  ANSI_COLOR_BLUE, ANSI_COLOR_MAGENTA, ANSI_COLOR_GREEN, ANSI_COLOR_YELLOW, BOLD_RED, ANSI_COLOR_RED
 };
 static const char *level_strings[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 void logd( FILE *stream, int level, const char *file, int line, const char *format, ...) {

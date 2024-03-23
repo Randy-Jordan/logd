@@ -3,7 +3,7 @@
 
 
 int main(void){
-    printf("\n\n");
+    LOG_DEBUG(stdout,"Sanity Checks");
     TEST(NULL);
     TEST(0 > 1);
     TEST(1 > 0);

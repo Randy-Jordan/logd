@@ -14,5 +14,6 @@ int main(void){
     LOG_WARN(stdout,"Testing log warning");
     LOG_ERROR(stdout,"Testing log error");
     LOG_FATAL(stdout,"Testing log fatal");
+    printf("\n");
     return EXIT_SUCCESS;
 }
