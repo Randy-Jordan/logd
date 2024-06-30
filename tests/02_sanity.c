@@ -3,7 +3,8 @@
 
 
 int main(void){
-    LOG_DEBUG(stdout,"Sanity Checks");
+    log_set_colors(true);
+    LOG_INFO("Sanity Checks");
     TEST(NULL);
     TEST(0 > 1);
     TEST(1 > 0);

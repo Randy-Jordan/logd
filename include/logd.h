@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <time.h>
+#include <unistd.h>
 
 #define UNUSED(x) (void)(x)
 #define NOW     time(NULL)
@@ -27,19 +30,40 @@
 #define ANSI_STYLE_BOLD      "\x1b[1m"
 #define ANSI_STYLE_UNDERLINE "\x1b[4m"
 
-enum {LEVEL_TRACE=0,LEVEL_DEBUG,LEVEL_INFO,LEVEL_WARN,LEVEL_ERROR,LEVEL_FATAL,LEVEL_COUNT};
+enum {LVL_TRACE=0, LVL_DEBUG, LVL_INFO, LVL_WARN, LVL_ERROR,LVL_FATAL,LVL_CNT};
+#define LOG_TRACE(...) log_log(LVL_TRACE, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_DEBUG(...) log_log(LVL_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_INFO(...)  log_log(LVL_INFO,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_WARN(...)  log_log(LVL_WARN,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_ERROR(...) log_log(LVL_ERROR, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_FATAL(...) log_log(LVL_FATAL, __FILE__, __LINE__, __VA_ARGS__)
 
-#define LOG_TRACE(stream, ...) logd(stream,LEVEL_TRACE, __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_DEBUG(stream, ...) logd(stream,LEVEL_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_INFO(stream, ...)  logd(stream,LEVEL_INFO,  __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_WARN(stream, ...)  logd(stream,LEVEL_WARN,  __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_ERROR(stream, ...) logd(stream,LEVEL_ERROR, __FILE__, __LINE__, __VA_ARGS__)
-#define LOG_FATAL(stream, ...) logd(stream,LEVEL_FATAL, __FILE__, __LINE__, __VA_ARGS__)
-void logd(FILE *stream, int level, const char *file, int line, const char *fmt, ...);
 
+struct Event{
+  struct tm *time; // Localized time.
+  const char *fmt; // Event format string.
+  va_list vlist; // Event variable list.
+  const char *file; // File where event occurred.
+  int line; // Line of file in where event occurred.
+  int level; // Global Log Level
+  void *udata; // Set the event's output destination
+};
+typedef struct Event Event;
+
+typedef void (*log_fn)(Event *ev);
+typedef void (*log_lock_fn)(bool lock, void *udata);
+
+void log_set_level(int level); // Set global log level
+void log_set_quiet(bool enable);// Turns off stderr, will still output to callbacks  
+void log_set_colors(bool enable);// Turns on ANSI colors
+int log_add_callback(log_fn fn, void *udata, int level); // Add callback
+int log_add_fp(FILE *fp, int level);
+void log_log(int level, const char *file, int line, const char *fmt, ...);
+
+// Basic Testing Macro
 #ifdef DEBUG
-#define TEST_FAILED(expr) printf(__DATE__" " __TIME__ " [%s@%d] " ANSI_COLOR_RED "FAILED %s \n"CRESET, __FILE__, __LINE__, #expr)
-#define TEST_PASSED(expr) printf(__DATE__" " __TIME__ " [%s@%d] " ANSI_COLOR_GREEN "PASSED %s\n"CRESET, __FILE__, __LINE__, #expr)
+#define TEST_FAILED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " ANSI_COLOR_RED "FAILED %s \n"CRESET, __FILE__, __LINE__, #expr)
+#define TEST_PASSED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " ANSI_COLOR_GREEN "PASSED %s\n"CRESET, __FILE__, __LINE__, #expr)
 #define TEST(expr) ((expr) ? TEST_PASSED(expr) : TEST_FAILED(expr))
 #else
 #define TEST_FAILED(expr)
