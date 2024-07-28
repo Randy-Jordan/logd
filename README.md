@@ -22,28 +22,38 @@ A simple logging and testing library written in C.
 - [ ] Quiet mode to disable logging to stderr, will only output to callbacks.
 
 ## Usage
+There are 6 levels of logging. Set each event and/or log to the level you see fit. Only events >= the global logging level will be logged. 
+```
+enum { LVL_TRACE, LVL_DEBUG, LVL_INFO, LVL_WARN, LVL_ERROR, LVL_FATAL, LVL_COUNT };
+void log_set_level(int level); // Set global log level
+void log_set_quiet(bool toggle);// Turns off/on stderr, will still output to callbacks  
+int log_add_callback(log_fn fn, void *udata, int level); // Add callback and lvl
+int log_add_fp(FILE *fp, int level); // Add file pointer to callbacks
+```
+
+
 Event structure that details file and line where it was called and the local time format. You can set what level the event is, format variables and output, and set the output file where it will be written to.<br>
 ```
-struct Event{
-  struct tm *time; // Localized time not __DATE__ __TIME__
-  const char *fmt; // Event format string.
-  va_list vlist; // Event variable list.
-  const char *file; // File where event occurred.
-  int line; // Line of file in where event occurred.
-  int level; // Event Log Level
-  void *out; // Set the event's output destination. FILE* or fd etc.
+struct Event {
+  va_list args; // Event arguments 
+  const char *fmt; // Event argument format
+  const char *file; // Filename where event occured
+  struct tm *time; // Time event occured (local)
+  void *out; // Where event is being output. FILE* fp, int fd, etc. 
+  int line; // Line number where event occurent
+  int level; // Severity level of the event. 
 };
 typedef struct Event Event;
 ``` 
 
 Function like macros for logging. They explicitly set the log level for the event and automatically populate __FILE__ and __LINE__.<br>
 ```
-LOGD_TRACE(const char *fmt, ...);
-LOGD_DEBUG(const char *fmt, ...);
-LOGD_INFO(const char *fmt, ...);
-LOGD_WARN(const char *fmt, ...);
-LOGD_ERROR(const char *fmt, ...);
-LOGD_FATAL(const char *fmt, ...);
+LOG_TRACE(const char *fmt, ...);
+LOG_DEBUG(const char *fmt, ...);
+LOG_INFO(const char *fmt, ...);
+LOG_WARN(const char *fmt, ...);
+LOG_ERROR(const char *fmt, ...);
+LOG_FATAL(const char *fmt, ...);
 ```
 
 Those macros are a wrapper for logd().<br>
