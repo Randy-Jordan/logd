@@ -30,14 +30,13 @@ struct Event{
   va_list vlist; // Event variable list.
   const char *file; // File where event occurred.
   int line; // Line of file in where event occurred.
-  int level; // Global Log Level
+  int level; // Event Log Level
   void *out; // Set the event's output destination. FILE* or fd etc.
 };
 typedef struct Event Event;
 ``` 
 
-
-Function like macros for logging. <br>
+Function like macros for logging. They explicitly set the log level for the event and automatically populate __FILE__ and __LINE__.<br>
 ```
 LOGD_TRACE(const char *fmt, ...);
 LOGD_DEBUG(const char *fmt, ...);
@@ -47,8 +46,16 @@ LOGD_ERROR(const char *fmt, ...);
 LOGD_FATAL(const char *fmt, ...);
 ```
 
-## Credits / Resources
+Those macros are a wrapper for logd().<br>
+```
 
+```
+
+
+## Credits / Resources
+[RXI - log.c](https://github.com/rxi/log.c)<br>
+[David Hanson - Interface and Implementations Repo](https://github.com/drh/cii)<br>
+[Lexi Hale - On Terminal Control](https://xn--rpa.cc/irl/term.html)<br>
 
 
 ## License
