@@ -1,11 +1,12 @@
 #include "../include/logd.h"
 #define MAX_CALLBACKS 32
 
-typedef struct {
+struct Callback{
     log_fn fn; // Our callback function
     void *out; // Event output ptr
     int level; // Level it will be invoke
-} Callback;
+};
+typedef struct Callback Callback;
 
 static struct {
     void *out; // Log output
@@ -17,7 +18,7 @@ static struct {
 } Log;
 
 static const char *level_colors[] = {
-    CLR_BLUE, CLR_MAGENTA, CLR_GREEN, CLR_YELLOW, BOLD_RED, CLR_RED
+    FMT(FG BLUE), FMT(FG MAGENTA), FMT(FG GREEN), FMT(FG YELLOW), BOLD_RED, FMT(FG RED),
 };
 static const char *level_strings[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
@@ -64,7 +65,7 @@ char buf[21];
             buf, level_strings[ev->level], ev->file, ev->line);
     }
     
-    vfprintf(ev->out, ev->fmt, ev->vlist);
+    vfprintf(ev->out, ev->fmt, ev->args);
     fprintf(ev->out, "\n");
     fflush(ev->out); 
 }
@@ -90,10 +91,10 @@ static void stdout_callback(Event *ev) {
         fprintf(
                 ev->out, "%s %-5s [%s@%d] ",
                 buf, level_strings[ev->level], ev->file, ev->line);}
-    vfprintf(ev->out, ev->fmt, ev->vlist);
+    vfprintf(ev->out, ev->fmt, ev->args);
     fprintf(ev->out, "\n");
     fflush(ev->out);}
-void log_log(int level, const char *file, int line, const char *fmt, ...) {
+void logd(int level, const char *file, int line, const char *fmt, ...) {
     Event ev = {
         .fmt   = fmt,
         .file  = file,
@@ -105,18 +106,18 @@ void log_log(int level, const char *file, int line, const char *fmt, ...) {
 
     if (!Log.quiet && level >= Log.level) {
         init_event(&ev, stderr);
-        va_start(ev.vlist, fmt);
+        va_start(ev.args, fmt);
         stdout_callback(&ev);
-        va_end(ev.vlist);
+        va_end(ev.args);
     }
 
     for (int i = 0; i < MAX_CALLBACKS && Log.callbacks[i].fn; i++) {
         Callback *cb = &Log.callbacks[i];
         if (level >= cb->level) {
             init_event(&ev, cb->out);
-            va_start(ev.vlist, fmt);
+            va_start(ev.args, fmt);
             cb->fn(&ev);
-            va_end(ev.vlist);
+            va_end(ev.args);
         }
     }
 

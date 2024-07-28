@@ -1,6 +1,7 @@
 #ifndef LOGD_INCLUDED
 #define LOGD_INCLUDED
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -8,9 +9,8 @@
 
 #define LOGD_VERSION "0.1.0"
 
-
 // Severity Levels
-enum { LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL };
+enum { LVL_TRACE, LVL_DEBUG, LVL_INFO, LVL_WARN, LVL_ERROR, LVL_FATAL, LVL_COUNT };
 
 struct Event {
   va_list args; // Event arguments 
@@ -21,7 +21,7 @@ struct Event {
   int line; // Line number where event occurent
   int level; // Severity level of the event. 
 };
-typedef struct Event Ev;
+typedef struct Event Event;
 
 typedef void (*log_fn)(Event *ev);
 typedef void (*log_lock_fn)(bool lock, void *out);
@@ -32,6 +32,13 @@ void log_set_colors(bool toggle);// Turns off/on ANSI colors
 int log_add_callback(log_fn fn, void *udata, int level); // Add callback
 int log_add_fp(FILE *fp, int level);
 void logd(int level, const char *file, int line, const char *fmt, ...);
+
+#define LOG_TRACE(...) logd(LVL_TRACE, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_DEBUG(...) logd(LVL_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_INFO(...)  logd(LVL_INFO,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_WARN(...)  logd(LVL_WARN,  __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_ERROR(...) logd(LVL_ERROR, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG_FATAL(...) logd(LVL_FATAL, __FILE__, __LINE__, __VA_ARGS__)
 
 #define UNUSED(x) (void)(x)
 #define NOW     time(NULL)
@@ -57,12 +64,13 @@ void logd(int level, const char *file, int line, const char *fmt, ...);
 #define WHITE "7"
 #define ANSI_ESC "\x1b"
 #define CRESET   "\x1b[0m"
+#define BOLD_RED "\x1b[1;91m"
 #define FMT(style) ANSI_ESC "[" style "m"
 
 // Basic Testing Macro
 #ifdef DEBUG
-#define TEST_FAILED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " RED "FAILED %s \n"CRESET, __FILE__, __LINE__, #expr)
-#define TEST_PASSED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " GREEN "PASSED %s\n"CRESET, __FILE__, __LINE__, #expr)
+#define TEST_FAILED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " FMT(FG RED) "FAILED %s \n"FMT(PLAIN), __FILE__, __LINE__, #expr)
+#define TEST_PASSED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " FMT(FG GREEN) "PASSED %s\n"FMT(PLAIN), __FILE__, __LINE__, #expr)
 #define TEST(expr) ((expr) ? TEST_PASSED(expr) : TEST_FAILED(expr))
 #else
 #define TEST_FAILED(expr)
