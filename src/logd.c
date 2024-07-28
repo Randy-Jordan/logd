@@ -18,7 +18,7 @@ static struct {
 } Log;
 
 static const char *level_colors[] = {
-    FMT(FG BLUE), FMT(FG MAGENTA), FMT(FG GREEN), FMT(FG YELLOW), BOLD_RED, FMT(FG RED),
+    "\x1b[34m", "\x1b[35m", "\x1b[32m", "\x1b[33m", "\x1b[1;91m","\x1b[31m",
 };
 static const char *level_strings[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 

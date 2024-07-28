@@ -1,7 +1,6 @@
 #ifndef LOGD_INCLUDED
 #define LOGD_INCLUDED
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -42,40 +41,5 @@ void logd(int level, const char *file, int line, const char *fmt, ...);
 
 #define UNUSED(x) (void)(x)
 #define NOW     time(NULL)
-#define SEED_PRNG() srand(time(NULL) ^ getpid())
-#define BAD_PRNG() srand(1)
-#define SIZEOF(x)    (ptrdiff_t)sizeof(x)
-#define COUNTOF(a)   (sizeof(a) / sizeof(*(a)))
-#define LENGTHOF(s)  (countof(s) - 1)
-
-#define FG "3"
-#define BR_FG "9"
-#define BG "4"
-#define BR_BG "10"
-#define WITH ";"
-#define PLAIN ""
-#define BLACK "0"
-#define RED "1"
-#define GREEN "2"
-#define YELLOW "3"
-#define BLUE "4"
-#define MAGENTA "5"
-#define CYAN "6"
-#define WHITE "7"
-#define ANSI_ESC "\x1b"
-#define CRESET   "\x1b[0m"
-#define BOLD_RED "\x1b[1;91m"
-#define FMT(style) ANSI_ESC "[" style "m"
-
-// Basic Testing Macro
-#ifdef DEBUG
-#define TEST_FAILED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " FMT(FG RED) "FAILED %s \n"FMT(PLAIN), __FILE__, __LINE__, #expr)
-#define TEST_PASSED(expr) printf(__DATE__" " __TIME__ " TEST  [%s@%d] " FMT(FG GREEN) "PASSED %s\n"FMT(PLAIN), __FILE__, __LINE__, #expr)
-#define TEST(expr) ((expr) ? TEST_PASSED(expr) : TEST_FAILED(expr))
-#else
-#define TEST_FAILED(expr)
-#define TEST_PASSED(expr)
-#define TEST(expr)
-#endif
 
 #endif
