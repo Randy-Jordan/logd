@@ -4,7 +4,7 @@
 struct Callback{
     log_fn fn; // Our callback function
     void *out; // Event output ptr
-    int level; // Level it will be invoke
+    int level; // Level it will be invoked
 };
 typedef struct Callback Callback;
 
@@ -14,7 +14,7 @@ static struct {
     int level; // Current logging level
     bool quiet; // Quiete mode
     bool colors; // Colored logs
-    Callback callbacks[MAX_CALLBACKS]; // Log event callback
+    Callback callbacks[MAX_CALLBACKS]; // Log event callbacks
 } Log;
 
 static const char *level_colors[] = {
@@ -35,11 +35,11 @@ void log_set_lock(log_lock_fn fn, void *out) {
 void log_set_level(int level) {
     Log.level = level;
 }
-void log_set_quiet(bool enable) {
-    Log.quiet = enable;
+void log_set_quiet(bool toggle) {
+    Log.quiet = toggle;
 }
-void log_set_colors(bool enable) {
-    Log.colors = enable;
+void log_set_colors(bool toggle) {
+    Log.colors = toggle;
 }
 int log_add_callback(log_fn fn, void *out, int level) {
     for (int i = 0; i < MAX_CALLBACKS; i++) {

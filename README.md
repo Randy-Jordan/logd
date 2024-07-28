@@ -13,13 +13,16 @@ A simple logging and testing library written in C.
 
 ## Features / TODOS
 
-- [ ] User Callbacks for file logging versatility.
-- [ ] Logging levels to reduce noise.
-- [ ] Optional colors to highlight level and message. 
-- [ ] Custom messages and formatting. 
-- [ ] Log locking for multithreading.
-- [ ] Macros for easy level logging.
-- [ ] Quiet mode to disable logging to stderr, will only output to callbacks.
+- [x] User Callbacks for file logging versatility.
+- [x] Logging levels to reduce noise.
+- [x] Optional colors to highlight level and message. 
+- [x] Custom messages and formatting. 
+- [x] Log locking for multithreading.
+- [x] Macros for easy level logging.
+- [x] Quiet mode to disable logging to stderr, will only output to callbacks.
+- [ ] Ability to change or remove date, time , and tag format.
+- [ ] Add fmt member to Log, and have function to change it. 
+
 
 ## Usage
 There are 6 levels of logging. Set each event and/or log to the level you see fit. Only events >= the global logging level will be logged. 
@@ -57,9 +60,6 @@ LOG_FATAL(const char *fmt, ...);
 ```
 
 Those macros are a wrapper for logd().<br>
-```
-
-```
 
 
 ## Credits / Resources
